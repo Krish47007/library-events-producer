@@ -5,6 +5,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kafka.tutorial.libraryeventsproducer.domain.LibraryEvent;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.producer.ProducerRecord;
+import org.apache.kafka.clients.producer.RecordMetadata;
+import org.apache.kafka.common.header.Header;
+import org.apache.kafka.common.header.internals.RecordHeader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.support.SendResult;
@@ -13,6 +16,7 @@ import org.springframework.util.concurrent.ListenableFuture;
 import org.springframework.util.concurrent.ListenableFutureCallback;
 
 import java.net.Inet4Address;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
@@ -26,7 +30,7 @@ public class LibraryEventsProducer {
     @Autowired
     private ObjectMapper objectMapper;
 
-    private static final String LIBRARY_EVENT_TOPIC = "library-event";
+    private static final String LIBRARY_EVENT_TOPIC = "library-events";
 
     public void sendLibraryEvent(LibraryEvent libraryEvent) throws JsonProcessingException {
 
@@ -74,7 +78,9 @@ public class LibraryEventsProducer {
 
     private ProducerRecord<Integer, String> buildProducerRecord(Integer key, String value) {
 
-        return new ProducerRecord<>(LIBRARY_EVENT_TOPIC,null,key,value);
+        //return new ProducerRecord<>(LIBRARY_EVENT_TOPIC,null,key,value);
+        List<Header> headers = List.of(new RecordHeader("event-source","scanner".getBytes()));
+        return new ProducerRecord<>(LIBRARY_EVENT_TOPIC,null,key,value,headers);
     }
 
     public void sendLibraryEventSynchronous(LibraryEvent libraryEvent) throws JsonProcessingException {

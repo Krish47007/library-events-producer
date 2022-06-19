@@ -1,6 +1,7 @@
 package com.kafka.tutorial.libraryeventsproducer.controller;
 
 import com.kafka.tutorial.libraryeventsproducer.domain.LibraryEvent;
+import com.kafka.tutorial.libraryeventsproducer.domain.LibraryEventType;
 import com.kafka.tutorial.libraryeventsproducer.producer.LibraryEventsProducer;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,8 @@ public class LibraryEventsController {
     {
         try
         {
+            libraryEvent.setEventType(LibraryEventType.NEW);
+
             //invoke Kafka Producer
             log.info("Before sending ");
             //libraryEventsProducer.sendLibraryEvent(libraryEvent);
