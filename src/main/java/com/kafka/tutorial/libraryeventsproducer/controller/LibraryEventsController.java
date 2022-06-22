@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
+
 @RestController
 @Slf4j
 public class LibraryEventsController {
@@ -19,7 +21,7 @@ public class LibraryEventsController {
     private LibraryEventsProducer libraryEventsProducer;
 
     @PostMapping("/v1/libraryevent")
-    public ResponseEntity<LibraryEvent> createLibraryEvent(@RequestBody LibraryEvent libraryEvent)
+    public ResponseEntity<LibraryEvent> createLibraryEvent(@RequestBody @Valid LibraryEvent libraryEvent)
     {
         try
         {
